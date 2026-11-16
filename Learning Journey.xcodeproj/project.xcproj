@@ -11,21 +11,20 @@
     ],
   },
   "files": [
-    { "kind": "folder", "path": "MyApp", "target-membership": [ "MyApp" ] },
+    { "kind": "folder", "path": "Learning Journey", "target-membership": [ "Learning Journey" ] },
     {
       "kind": "group",
       "name": "Products",
       "children": [
-        { "path": "<PRODUCTS>/MyApp.app", "id": "000000000000000000000120", "type": "wrapper.application", "index": false },
+        { "path": "<PRODUCTS>/Learning Journey.app", "id": "000000000000000000000120", "type": "wrapper.application", "index": false },
       ],
     },
-    { "kind": "folder", "path": "Models", "target-membership": [ "MyApp" ] },
   ],
   "targets": [
     {
-      "name": "MyApp",
+      "name": "Learning Journey",
       "id": "000000000000000100000000",
-      "product": "Products/MyApp.app",
+      "product": "Products/Learning Journey.app",
       "product-type": "application",
       "build-phases": [
         "compile-sources",
