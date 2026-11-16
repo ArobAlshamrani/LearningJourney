@@ -45,3 +45,7 @@ Track your learning consistency.
 
 ## App Preview
 
+<p align="center">
+  <img src="Screenshots/learning-journey-showcase.png" width="900" alt="Learning Journey App Showcase">
+</p>
+
