@@ -1,4 +1,9 @@
 
+<table width="100%">
+<tr>
+<td>
+
+
 <div align="center">
 
 # 📚 Learning Journey
@@ -51,4 +56,8 @@ Track your learning consistency.
 <p align="center">
   <img src="Screenshots/learning-journey-showcase.png" width="900" alt="Learning Journey App Showcase">
 </p>
+
+</td>
+</tr>
+</table>
 
