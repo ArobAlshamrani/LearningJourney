@@ -11,9 +11,12 @@ A simple iOS app designed to help you build a consistent learning habit, one day
 
 </div>
 
-![Swift](https://img.shields.io/badge/Swift-F7B500?style=for-the-badge&logo=swift&logoColor=white)
-![SwiftUI](https://img.shields.io/badge/SwiftUI-FA7343?style=for-the-badge&logo=swift&logoColor=white)
-![iOS](https://img.shields.io/badge/iOS-333333?style=for-the-badge&logo=apple&logoColor=white)
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Swift-F7B500?style=for-the-badge&logo=swift&logoColor=white" alt="Swift">
+  <img src="https://img.shields.io/badge/SwiftUI-FA7343?style=for-the-badge&logo=swift&logoColor=white" alt="SwiftUI">
+  <img src="https://img.shields.io/badge/iOS-333333?style=for-the-badge&logo=apple&logoColor=white" alt="iOS">
+</p>
 
 ---
 
