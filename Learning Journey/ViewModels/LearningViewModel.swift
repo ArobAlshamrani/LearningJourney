@@ -12,12 +12,12 @@ final class LearningViewModel {
     
     
     // MARK: - Load Saved Data
-
+   //ModelContext: نوع يوفره SwiftData للتعامل مع البيانات المخزنة، مثل جلبها وإضافتها وحذفها وحفظ التغييرات.
     func loadRecords(from context: ModelContext) {
         do {
             // Load daily records
             records = try context.fetch(
-                FetchDescriptor<DailyRecord>()
+                FetchDescriptor<DailyRecord>()//حدد نوع البيانات اللي نبي نجلبها، وهو DailyRecord.
             )
             let today = Calendar.current.startOfDay(for: Date())
 
@@ -40,6 +40,7 @@ final class LearningViewModel {
             activeGoal = goals.first {
                 $0.isActive
             }
+            
 
         } catch {
             print("Failed to load data: \(error)")
@@ -93,7 +94,7 @@ final class LearningViewModel {
 
                 // Create a new record
                 let record = DailyRecord(
-                    date: today,
+                    date: Date(), // يحفظ وقت التسجيل الفعلي
                     status: status,
                     goalID: goalID
                 )
@@ -111,18 +112,25 @@ final class LearningViewModel {
         }
     }
 
-    
-    
     // MARK: - Streak
-    
-    func calculateStreak(goalStartDate: Date) -> Int //معناها الدالة ترجع رقمًا صحيحًا يمثل عدد أيام الاستمرارية.
-    {
-        StreakCalculator.calculate(
-            records: records,
+
+    func calculateStreak(goalStartDate: Date) -> Int {
+
+        guard let goalID = activeGoal?.id else {
+            return 0
+        }
+
+        // حساب سجلات الهدف الحالي فقط
+        let goalRecords = records.filter {
+            $0.goalID == goalID
+        }
+
+        return StreakCalculator.calculate(
+            records: goalRecords,
             goalStartDate: goalStartDate
         )
+        
     }
-    
     // MARK: - Goal Result
     /*true → الهدف مكتمل، نعرض Well done!
      false → انتهت المدة بدون تحقيق الهدف، نعرض Goal Not Met.

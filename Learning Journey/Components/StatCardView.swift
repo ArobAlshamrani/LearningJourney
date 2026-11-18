@@ -1,30 +1,48 @@
+
 import SwiftUI
 
 struct StatCardView: View {
 
-    let count: Int
-    let title: String
-    let symbol: String
-    let symbolColor: Color
+    // MARK: - Properties
+
+    let count: Int // عدد الأيام
+    let title: String // عنوان الكارد
+    let symbol: String // اسم الأيقونة
+    let symbolColor: Color // لون الأيقونة
+
+    // MARK: - Body
 
     var body: some View {
 
         VStack(spacing: 6) {
 
+            // MARK: - Card Icon
+
             Image(systemName: symbol)
                 .font(.system(size: 22))
                 .foregroundStyle(symbolColor)
 
-            Text("\(count) \(count == 1 ? "day" : "days")")//وهو اختصار لشرط if / else.
+            // MARK: - Days Count
+
+            // يعرض day للمفرد و days للجمع
+            Text("\(count) \(count == 1 ? "day" : "days")")
                 .font(.system(size: 16, weight: .semibold))
                 .foregroundStyle(.white)
+
+            // MARK: - Card Title
 
             Text(title)
                 .font(.system(size: 13))
                 .foregroundStyle(.gray)
         }
-        .frame(maxWidth: .infinity)
-        .frame(height: 92)
-        .appGlass(.card)
+
+        // MARK: - Card Design
+
+        .frame(maxWidth: .infinity) // عرض مرن
+        .frame(height: 92) // ارتفاع ثابت
+        .glassEffect(
+            .regular,
+            in: RoundedRectangle(cornerRadius: 24)
+        )
     }
 }

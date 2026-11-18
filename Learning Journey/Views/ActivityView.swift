@@ -2,11 +2,16 @@ import SwiftUI
 import SwiftData
 
 struct ActivityView: View {
+    
+ // MARK: - Properties
     @Environment(\.modelContext)
-    private var modelContext
+    private var modelContext // الوصول إلى SwiftData
 
-    @AppStorage("learningGoalDuration")
-    private var goalDuration = "Week"
+    // MARK: - Goal Duration
+    // يقرأ مدة الهدف الحالي من SwiftData
+    private var goalDuration: String {
+        viewModel.activeGoal?.duration ?? "Week"
+    }// مدة الهدف المحفوظة
     
     // MARK: - Goal Result
     let previewResult: GoalResult?
@@ -71,7 +76,11 @@ struct ActivityView: View {
                         .font(.system(size: 20, weight: .medium))
                         .foregroundStyle(.white)
                         .frame(width: 44, height: 44)
-                        .appGlass(.circle, tint: .white.opacity(0.15))
+                        .glassEffect(
+                            .regular.tint(.white.opacity(0.15)),
+                            in: Circle()
+                        )
+                      
                 }
                 .buttonStyle(.plain)
                 
@@ -86,9 +95,16 @@ struct ActivityView: View {
                         .font(.system(size: 20, weight: .medium))
                         .foregroundStyle(.white)
                         .frame(width: 44, height: 44)
-                    .appGlass(.circle, tint: .white.opacity(0.15))              }
-                .buttonStyle(.plain)
+                        .glassEffect(
+                            .regular.tint(.white.opacity(0.15)),
+                            in: Circle()
+                        )
+                     }
+                .buttonStyle(.plain)// Removes the default button style
+
             }
+            .padding(.horizontal, 20)
+            .padding(.top, 16)
             // 2. Weekly Calendar
             HStack(spacing: 0) {
                 ForEach(weekDates, id: \.self) { date in
@@ -116,17 +132,23 @@ struct ActivityView: View {
 
 
             }
-            
-            // 3. Statistics Cards
+            // MARK: - Statistics Cards
+
             HStack(spacing: 12) {
-                
+
+                // Current Streak
                 StatCardView(
-                    count: viewModel.learnedDays,
-                    title: "Learned",
+                    count: viewModel.activeGoal.map {
+                        viewModel.calculateStreak(
+                            goalStartDate: $0.startDate
+                        )
+                    } ?? 0,
+                    title: "Streak",
                     symbol: "flame.fill",
                     symbolColor: .orange
                 )
-                
+
+                // Used Freezes
                 StatCardView(
                     count: viewModel.freezesUsed,
                     title: "Freezed",

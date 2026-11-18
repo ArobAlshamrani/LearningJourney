@@ -1,30 +1,33 @@
+
 import SwiftUI
 import SwiftData
 
 struct EditGoalView: View {
-    
+
+    // MARK: - Properties
+
+    // الوصول إلى SwiftData لحفظ التغييرات
     @Environment(\.modelContext)
     private var modelContext
+
+    // الوصول إلى بيانات الهدف الحالي ودوال التحديث
     let viewModel: LearningViewModel
-    
+
     // MARK: - Navigation
 
+    // الرجوع إلى الشاشة السابقة
     @Environment(\.dismiss) private var dismiss
 
-    // MARK: - Saved Goal
-
-    @AppStorage("learningGoalName")
-    private var savedGoalName = ""
-
-    @AppStorage("learningGoalDuration")
-    private var savedDuration = "Week"
-
     // MARK: - Temporary Editing State
-    @State private var showUpdateConfirmation = false
-    
-    @State private var goalName = ""
 
+    // التحكم في ظهور نافذة تأكيد التحديث
+    @State private var showUpdateConfirmation = false
+
+    // تخزين التعديلات مؤقتًا قبل حفظها
+    @State private var goalName = ""
     @State private var selectedDuration: OnboardingDuration = .week
+
+    // MARK: - Colors
 
     private let orange = Color(
         red: 0.98,
@@ -42,6 +45,7 @@ struct EditGoalView: View {
 
             HStack {
 
+                // زر الرجوع بدون حفظ
                 Button {
                     dismiss()
                 } label: {
@@ -50,9 +54,9 @@ struct EditGoalView: View {
                         .font(.system(size: 20, weight: .medium))
                         .foregroundStyle(.white)
                         .frame(width: 44, height: 44)
-                        .appGlass(
-                            .circle,
-                            interactive: true
+                        .glassEffect(
+                            .regular.interactive(),
+                            in: Circle()
                         )
                 }
                 .buttonStyle(.plain)
@@ -64,21 +68,25 @@ struct EditGoalView: View {
 
                 Spacer()
 
+                // زر عرض رسالة تأكيد التحديث
                 Button {
                     showUpdateConfirmation = true
                 } label: {
-                    
+
                     Image(systemName: "checkmark")
                         .font(.system(size: 22, weight: .medium))
                         .foregroundStyle(.white)
                         .frame(width: 44, height: 44)
-                        .appGlass(
-                            .circle,
-                            tint: orange,
-                            interactive: true
+                        .glassEffect(
+                            .regular
+                                .tint(orange)
+                                .interactive(),
+                            in: Circle()
                         )
                 }
                 .buttonStyle(.plain)
+
+                // منع التحديث إذا كان اسم الهدف فارغًا
                 .disabled(
                     goalName.trimmingCharacters(
                         in: .whitespacesAndNewlines
@@ -92,13 +100,14 @@ struct EditGoalView: View {
                 .font(.system(size: 16))
                 .padding(.top, 44)
 
+            // ربط حقل النص باسم الهدف المؤقت
             TextField("Swift", text: $goalName)
                 .font(.system(size: 17))
                 .padding(.vertical, 16)
 
             Divider()
 
-            // MARK: - Duration
+            // MARK: - Goal Duration
 
             Text("I want to learn it in a")
                 .font(.system(size: 16))
@@ -106,13 +115,17 @@ struct EditGoalView: View {
 
             HStack(spacing: 12) {
 
+                // عرض جميع خيارات المدة
                 ForEach(
                     OnboardingDuration.allCases,
                     id: \.self
                 ) { duration in
 
                     Button {
+
+                        // تحديث المدة المختارة مؤقتًا
                         selectedDuration = duration
+
                     } label: {
 
                         Text(duration.rawValue)
@@ -124,12 +137,17 @@ struct EditGoalView: View {
                             )
                             .padding(.horizontal, 22)
                             .frame(height: 46)
-                            .appGlass(
-                                .capsule,
-                                tint: selectedDuration == duration
-                                ? orange
-                                : nil,
-                                interactive: true
+
+                            // تمييز الخيار المحدد باللون البرتقالي
+                            .glassEffect(
+                                .regular
+                                    .tint(
+                                        selectedDuration == duration
+                                        ? orange
+                                        : nil
+                                    )
+                                    .interactive(),
+                                in: Capsule()
                             )
                     }
                     .buttonStyle(.plain)
@@ -144,28 +162,42 @@ struct EditGoalView: View {
             Color.black.ignoresSafeArea()
         }
         .toolbar(.hidden, for: .navigationBar)
+
+        // MARK: - Load Current Goal
+
         .onAppear {
 
-            goalName = savedGoalName
+            // قراءة بيانات الهدف الحالي من SwiftData
+            guard let goal = viewModel.activeGoal else {
+                return
+            }
+
+            // تعبئة الحقول بالقيم الحالية
+            goalName = goal.title
 
             selectedDuration = OnboardingDuration(
-                rawValue: savedDuration
+                rawValue: goal.duration
             ) ?? .week
         }
+
+        // MARK: - Confirmation Overlay
+
         .overlay {
+
+            // عرض نافذة التأكيد عند الضغط على علامة الصح
             if showUpdateConfirmation {
                 confirmationPopup
             }
         }
     }
-    
+
     // MARK: - Update Confirmation Popup
 
     private var confirmationPopup: some View {
 
         ZStack {
 
-            // Dark background behind the popup
+            // تعتيم الخلفية خلف نافذة التأكيد
             Color.black.opacity(0.65)
                 .ignoresSafeArea()
 
@@ -175,18 +207,23 @@ struct EditGoalView: View {
                     .font(.system(size: 18, weight: .semibold))
                     .foregroundStyle(.white)
 
+                // تنبيه المستخدم أن التحديث سيصفر الستريك
                 Text("If you update now, your streak will start over.")
                     .font(.system(size: 16))
                     .foregroundStyle(.gray)
                     .fixedSize(horizontal: false, vertical: true)
 
                 HStack(spacing: 10) {
-                    
-                    // Dismiss Button
+
+                    // MARK: - Dismiss Button
+
                     Button {
-                        print("Dismiss tapped")
+
+                        // إغلاق النافذة دون حفظ التغييرات
                         showUpdateConfirmation = false
+
                     } label: {
+
                         Text("Dismiss")
                             .frame(maxWidth: .infinity)
                             .frame(height: 48)
@@ -195,67 +232,72 @@ struct EditGoalView: View {
                                 in: Capsule()
                             )
                     }
-                    
-                    // Update Button
+
+                    // MARK: - Update Button
+
                     Button {
-                        print("Update tapped")
+
+                        // إغلاق النافذة ثم حفظ الهدف الجديد
                         showUpdateConfirmation = false
                         saveGoal()
+
                     } label: {
+
                         Text("Update")
                             .frame(maxWidth: .infinity)
                             .frame(height: 48)
                             .background(orange, in: Capsule())
                     }
                 }
-                .buttonStyle(.plain)
                 .font(.system(size: 16, weight: .medium))
                 .foregroundStyle(.white)
                 .buttonStyle(.plain)
                 .padding(.top, 8)
             }
 
+            // MARK: - Popup Design
+
             .padding(22)
             .frame(maxWidth: 320)
-            .background {
-                RoundedRectangle(cornerRadius: 28)
-                    .fill(Color(red: 0.11, green: 0.11, blue: 0.11))
-            }
-            .overlay {
-                RoundedRectangle(cornerRadius: 28)
-                    .stroke(Color.white.opacity(0.18), lineWidth: 1)
-            }
+            .glassEffect(
+                .regular,
+                in: RoundedRectangle(cornerRadius: 28)
+            )
             .padding(.horizontal, 24)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 
     // MARK: - Save Changes
+
     private func saveGoal() {
 
+        // حذف المسافات الزائدة من اسم الهدف
         let name = goalName.trimmingCharacters(
             in: .whitespacesAndNewlines
         )
 
+        // إيقاف الحفظ إذا كان الاسم فارغًا
         guard !name.isEmpty else { return }
 
         do {
+
+            // إنشاء هدف جديد وحفظه في SwiftData
             try viewModel.updateGoal(
                 title: name,
                 duration: selectedDuration.rawValue,
                 in: modelContext
             )
 
-            savedGoalName = name
-            savedDuration = selectedDuration.rawValue
-
+            // الرجوع بعد نجاح الحفظ
             dismiss()
 
         } catch {
+
+            // طباعة الخطأ إذا فشل حفظ الهدف
             print("Failed to update goal: \(error)")
         }
     }
-
 }
 
 #Preview {

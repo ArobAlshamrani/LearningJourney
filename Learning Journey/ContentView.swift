@@ -1,8 +1,11 @@
-
 import SwiftUI
-
+import SwiftData
 struct ContentView: View {
+    // MARK: - SwiftData
 
+    @Environment(\.modelContext)
+    private var modelContext
+    
     @AppStorage("learningGoalName")
     private var goalName = ""
 
@@ -14,11 +17,23 @@ struct ContentView: View {
         if goalName.isEmpty {
 
             OnboardingView { name, duration in
+                // حفظ أول هدف في SwiftData
+                do {
+                    let viewModel = LearningViewModel()
 
-                goalDuration = duration
-                goalName = name
+                    try viewModel.updateGoal(
+                        title: name,
+                        duration: duration,
+                        in: modelContext
+                    )
+
+                    goalDuration = duration
+                    goalName = name
+
+                } catch {
+                    print("Failed to create goal: \(error)")
+                }
             }
-
         } else {
             NavigationStack {
                 ActivityView()

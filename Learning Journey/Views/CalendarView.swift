@@ -72,7 +72,11 @@ struct CalendarView: View {
                         .font(.system(size: 20))
                         .foregroundStyle(.white)
                         .frame(width: 44, height: 44)
-                        .appGlass(.circle)
+                    // MARK: - Calendar Button Glass
+                    .glassEffect(
+                        .regular,
+                        in: Circle()
+                    )
                 }
 
                 Spacer()

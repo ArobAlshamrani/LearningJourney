@@ -1,60 +1,95 @@
-
 import Foundation
 
 struct StreakCalculator {
 
+    // MARK: - Calculate Streak
+
     static func calculate(
         records: [DailyRecord],
         goalStartDate: Date,
-      //  goalStartDate: هذا  Parameter (مدخل للدالة)، يمثل تاريخ بداية الهدف الحالي.
         now: Date = Date()
     ) -> Int {
 
         let calendar = Calendar.current
         let startDay = calendar.startOfDay(for: goalStartDate)
 
-        let recordsByDay = Dictionary(
-            records.map {
-                (calendar.startOfDay(for: $0.date), $0.status)
-            },
-            uniquingKeysWith: { _, latest in latest }
-        )
+        // ترتيب التسجيلات حسب وقتها
+        let sortedRecords = records
+            .filter {
+                $0.date >= startDay && $0.date <= now
+            }
+            .sorted {
+                $0.date < $1.date
+            }
 
-        var day = calendar.startOfDay(for: now)
         var streak = 0
+        var lastRecord: DailyRecord?
 
-        // Today is still available for logging
-        if recordsByDay[day] == nil {
-            guard let yesterday = calendar.date(
-                byAdding: .day,
-                value: -1,
-                to: day
-            ) else {
-                return 0
+        // MARK: - Count Streak
+
+        for record in sortedRecords {
+
+            if let previous = lastRecord {
+
+                // بداية اليوم التالي لآخر تسجيل
+                let previousDay = calendar.startOfDay(
+                    for: previous.date
+                )
+
+                guard let nextDay = calendar.date(
+                    byAdding: .day,
+                    value: 1,
+                    to: previousDay
+                ),
+                let expiry = calendar.date(
+                    byAdding: .hour,
+                    value: 32,
+                    to: nextDay
+                ) else {
+                    return 0
+                }
+
+                // تصفير الستريك إذا انتهت المهلة
+                if record.date > expiry {
+                    streak = 0
+                }
             }
 
-            day = yesterday
-        }
-
-        while day >= startDay {
-
-            guard let status = recordsByDay[day] else {
-                break
-            }
-
-            if status == .learned {
+            // Learned يزيد الستريك
+            // Freeze يحافظ عليه بدون زيادة
+            if record.status == .learned {
                 streak += 1
             }
 
-            guard let previousDay = calendar.date(
-                byAdding: .day,
-                value: -1,
-                to: day
-            ) else {
-                break
-            }
+            lastRecord = record
+        }
 
-            day = previousDay
+        // MARK: - Check Current Expiration
+
+        guard let lastRecord else {
+            return 0
+        }
+
+        let lastDay = calendar.startOfDay(
+            for: lastRecord.date
+        )
+
+        guard let nextDay = calendar.date(
+            byAdding: .day,
+            value: 1,
+            to: lastDay
+        ),
+        let expiry = calendar.date(
+            byAdding: .hour,
+            value: 32,
+            to: nextDay
+        ) else {
+            return 0
+        }
+
+        // تصفير الستريك إذا لم يسجل خلال المهلة
+        if now > expiry {
+            return 0
         }
 
         return streak

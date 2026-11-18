@@ -1,19 +1,25 @@
+
 import SwiftUI
 
 // MARK: - Goal Result Types
 
+// يحدد حالات نتيجة الهدف
 enum GoalResult {
     case completed
     case notMet
 
+    // MARK: - Result Symbol
+
     var symbol: String {
         switch self {
         case .completed:
-            return "hands.clap.fill"
+            return "hands.and.sparkles.fill"
         case .notMet:
             return "xmark.seal.fill"
         }
     }
+
+    // MARK: - Result Title
 
     var title: String {
         switch self {
@@ -23,6 +29,8 @@ enum GoalResult {
             return "You didn't reach your goal this time."
         }
     }
+
+    // MARK: - Result Subtitle
 
     var subtitle: String {
         switch self {
@@ -38,8 +46,10 @@ enum GoalResult {
 
 struct GoalResultView: View {
 
-    let result: GoalResult
-    let onSetGoal: () -> Void // هذا يسمح لنا نحدد لاحقًا وش يصير لما المستخدم يضغط Set a goal
+    // MARK: - Properties
+
+    let result: GoalResult // يحدد نتيجة الهدف
+    let onSetGoal: () -> Void // العملية عند الضغط على الزر
 
     private let orange = Color(
         red: 1,
@@ -47,59 +57,57 @@ struct GoalResultView: View {
         blue: 0.15
     )
 
-    var body: some View {
+    private let gold = Color(
+        red: 247.0 / 255,
+        green: 181.0 / 255,
+        blue: 0
+    )
 
+    // MARK: - Body
+
+    var body: some View {
         VStack(spacing: 0) {
 
             // MARK: - Result Icon
 
-            ZStack {
+            // يغير الأيقونة واللون حسب نتيجة الهدف
+            Image(systemName: result.symbol)
+                .font(.system(
+                    size: result == .completed ? 43 : 40
+                ))
+                .foregroundStyle(
+                    result == .completed ? gold : orange
+                )
+                .frame(height: 55)
+                .padding(.bottom, 14)
 
-                if result == .completed {
+            // MARK: - Result Title
 
-                    Image(systemName: "hands.and.sparkles.fill")
-                        .font(.system(size: 43))
-                        .foregroundStyle(
-                            Color(
-                                red: 247.0 / 255,
-                                green: 181.0 / 255,
-                                blue: 0
-                            )
-                        )
-
-                
-
-                } else {
-
-                    Image(systemName: "xmark.seal.fill")
-                        .font(.system(size: 40))
-                        .foregroundStyle(orange)
-                }
-            }
-            .frame(height: 55)
-            .padding(.bottom, 14)
-
-            // Result Title
             Text(result.title)
-                .font(.system(size: 17, weight: .semibold))                .foregroundStyle(.white)
+                .font(.system(size: 17, weight: .semibold))
+                .foregroundStyle(.white)
                 .multilineTextAlignment(.center)
 
-            // Result Description
+            // MARK: - Result Description
+
             Text(result.subtitle)
                 .font(.system(size: 14))
                 .foregroundStyle(.gray)
                 .multilineTextAlignment(.center)
                 .padding(.top, 6)
 
-            // Set a Goal Button
+            // MARK: - Set a Goal Button
+
             Button(action: onSetGoal) {
-                Label("Set a goal",
-                      systemImage: "pencil.and.outline")
-                    .font(.system(size: 16, weight: .medium))
-                    .foregroundStyle(.white)
-                    .padding(.horizontal, 20)
-                    .frame(height: 44)
-                    .background(orange, in: Capsule())
+                Label(
+                    "Set a goal",
+                    systemImage: "pencil.and.outline"
+                )
+                .font(.system(size: 16, weight: .medium))
+                .foregroundStyle(.white)
+                .padding(.horizontal, 20)
+                .frame(height: 44)
+                .background(orange, in: Capsule())
             }
             .buttonStyle(.plain)
             .padding(.top, 70)
@@ -112,16 +120,11 @@ struct GoalResultView: View {
 // MARK: - Previews
 
 #Preview("Goal Completed") {
-    GoalResultView(result: .completed) {
-        print("Set a goal tapped")
-    }
-    .preferredColorScheme(.dark)
+    GoalResultView(result: .completed) {}
+        .preferredColorScheme(.dark)
 }
 
-/*#Preview("Goal Not Met") {
-    GoalResultView(result: .notMet) {
-        print("Set a goal tapped")
-    }
-    .preferredColorScheme(.dark)
+#Preview("Goal Not Met") {
+    GoalResultView(result: .notMet) {}
+        .preferredColorScheme(.dark)
 }
-*/

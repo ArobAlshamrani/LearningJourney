@@ -1,20 +1,29 @@
 import SwiftUI
 
+// MARK: - Goal Duration Options
+
+// خيارات مدة الهدف
+/*enum: نستخدمها لتحديد خيارات ثابتة.
+ String: يخلي لكل خيار قيمة نصية مثل "Week".
+ CaseIterable: يسمح لنا نستخدم .allCases للوصول لجميع الخيارات.*/
 enum OnboardingDuration: String, CaseIterable {
-    //CaseIterable عشان نقدر نعرض جميع الخيارات باستخدام ForEach بدون ما نكرر تصميم الزر ثلاث مرات.
     case week = "Week"
     case month = "Month"
     case year = "Year"
 }
+
 struct OnboardingView: View {
 
     // MARK: - Properties
 
+    // حفظ إدخالات المستخدم مؤقتًا
     @State private var goalName = ""
     @State private var selectedDuration: OnboardingDuration = .week
 
+    // إرسال اسم الهدف ومدته إلى ContentView
     let onStart: (String, String) -> Void
 
+    // لون التطبيق الأساسي
     private let orange = Color(
         red: 0.98,
         green: 0.54,
@@ -55,6 +64,7 @@ struct OnboardingView: View {
                     .font(.system(size: 16))
                     .padding(.top, 38)
 
+                // حقل إدخال اسم الهدف
                 TextField(
                     "Swift",
                     text: $goalName,
@@ -74,13 +84,17 @@ struct OnboardingView: View {
 
                 HStack(spacing: 12) {
 
+                    // عرض جميع خيارات المدة
                     ForEach(
                         OnboardingDuration.allCases,
                         id: \.self
                     ) { duration in
 
                         Button {
+
+                            // تحديث المدة المختارة
                             selectedDuration = duration
+
                         } label: {
 
                             Text(duration.rawValue)
@@ -92,12 +106,17 @@ struct OnboardingView: View {
                                 )
                                 .padding(.horizontal, 22)
                                 .frame(height: 46)
-                                .appGlass(
-                                    .capsule,
-                                    tint: selectedDuration == duration
-                                    ? orange
-                                    : nil,
-                                    interactive: true
+
+                                // تمييز الخيار المحدد بالبرتقالي
+                                .glassEffect(
+                                    .regular
+                                        .tint(
+                                            selectedDuration == duration
+                                            ? orange
+                                            : nil
+                                        )
+                                        .interactive(),
+                                    in: Capsule()
                                 )
                         }
                         .buttonStyle(.plain)
@@ -107,19 +126,24 @@ struct OnboardingView: View {
             }
             .padding(.horizontal, 20)
         }
-        .safeAreaInset(edge: .bottom) {
 
-            // MARK: - Start Learning
+        // MARK: - Start Learning
+
+        // تثبيت زر البداية أسفل الشاشة
+        .safeAreaInset(edge: .bottom) {
 
             VStack(spacing: 14) {
 
                 Button {
+
+                    // إرسال بيانات الهدف بعد إزالة المسافات الزائدة
                     onStart(
                         goalName.trimmingCharacters(
                             in: .whitespacesAndNewlines
                         ),
                         selectedDuration.rawValue
                     )
+
                 } label: {
 
                     Text("Start Learning")
@@ -127,20 +151,25 @@ struct OnboardingView: View {
                         .foregroundStyle(.white)
                         .padding(.horizontal, 24)
                         .frame(height: 46)
-                        .appGlass(
-                            .capsule,
-                            tint: orange,
-                            interactive: true
+
+                        // Glass effect for start button
+                        .glassEffect(
+                            .regular
+                                .tint(orange)
+                                .interactive(),
+                            in: Capsule()
                         )
                 }
                 .buttonStyle(.plain)
+
+                // منع البدء بدون اسم هدف
                 .disabled(
                     goalName.trimmingCharacters(
                         in: .whitespacesAndNewlines
                     ).isEmpty
                 )
 
-                Text("You can edit your desire later")
+                Text("You can edit your goal later")
                     .font(.system(size: 12))
                     .foregroundStyle(.secondary)
             }
@@ -155,7 +184,10 @@ struct OnboardingView: View {
     }
 }
 
+// MARK: - Preview
+
 #Preview {
+
     OnboardingView { name, duration in
         print(name, duration)
     }
