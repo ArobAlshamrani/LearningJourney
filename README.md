@@ -6,7 +6,7 @@
 
 <div align="center">
 
-# 📚 Learning Journey
+#  Learning Journey
 
 ### Small Steps, Big Progress.
 
