@@ -4,10 +4,9 @@
 <td>
 
 
-
-<h3>
-  <img src="Screenshots/app-icon.png" width="48" align="absmiddle">&nbsp;&nbsp;Learning Journey
-</h3>
+<p align="center">
+  <img src="Screenshots/learning-journey-hero.png" width="100%" alt="Learning Journey App Showcase">
+</p>
 
 <p>
   <strong>Small Steps, Big Progress.</strong><br>
