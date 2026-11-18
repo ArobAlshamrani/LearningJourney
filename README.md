@@ -1,31 +1,29 @@
 
-<table width="100%">
-<tr>
-<td>
-
-
 <p align="center">
-  <img src="Screenshots/learning-journey-hero.png" width="100%" alt="Learning Journey App Showcase">
+  <img src="Screenshots/learning-journey-visual.png" width="100%" alt="Learning Journey App Showcase">
 </p>
 
-<p>
-  <strong>Small Steps, Big Progress.</strong><br>
-  Build a consistent learning habit, one day at a time.
-</p>
+<div align="center">
+
+# Learning Journey
+
+**Small Steps, Big Progress.**
+
+A simple iOS app designed to help you build a consistent learning habit, one day at a time.
 
 ![Swift](https://img.shields.io/badge/Swift-F7B500?style=for-the-badge&logo=swift&logoColor=white)
 ![SwiftUI](https://img.shields.io/badge/SwiftUI-FA7343?style=for-the-badge&logo=swift&logoColor=white)
 ![iOS](https://img.shields.io/badge/iOS-333333?style=for-the-badge&logo=apple&logoColor=white)
 
-
+</div>
 
 ---
 
-## ✦ About the App
+## About the App
 
-Learning Journey is an iOS app designed to help users build consistent learning habits through daily progress tracking.
+Learning Journey helps users stay committed to their personal learning goals by making daily progress easy to track.
 
-The app encourages users to stay committed to their personal learning goals while allowing flexibility for rest days.
+Users can record learning days, view their learning history, and take breaks when needed.
 
 ## Key Features
 
@@ -43,17 +41,3 @@ Set and update your learning goal duration.
 
 <img src="https://api.iconify.design/lucide/flame.svg?color=%23F7B500" width="20" align="absmiddle">&nbsp;&nbsp; **Streak Tracking**  
 Track your learning consistency.
-
-
----
-
-## App Preview
-
-<p align="center">
-  <img src="Screenshots/learning-journey-showcase.png" width="900" alt="Learning Journey App Showcase">
-</p>
-
-</td>
-</tr>
-</table>
-
