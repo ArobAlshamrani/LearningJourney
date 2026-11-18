@@ -4,24 +4,21 @@
 <td>
 
 
-<div align="center">
 
-#  Learning Journey
+<h3>
+  <img src="Screenshots/app-icon.png" width="48" align="absmiddle">&nbsp;&nbsp;Learning Journey
+</h3>
 
-### Small Steps, Big Progress.
-
-A simple iOS app designed to help you build a consistent learning habit, one day at a time.
-
-**Built with Swift & SwiftUI**
-
-</div>
-
-
-<p align="center">
-  <img src="https://img.shields.io/badge/Swift-F7B500?style=for-the-badge&logo=swift&logoColor=white" alt="Swift">
-  <img src="https://img.shields.io/badge/SwiftUI-FA7343?style=for-the-badge&logo=swift&logoColor=white" alt="SwiftUI">
-  <img src="https://img.shields.io/badge/iOS-333333?style=for-the-badge&logo=apple&logoColor=white" alt="iOS">
+<p>
+  <strong>Small Steps, Big Progress.</strong><br>
+  Build a consistent learning habit, one day at a time.
 </p>
+
+![Swift](https://img.shields.io/badge/Swift-F7B500?style=for-the-badge&logo=swift&logoColor=white)
+![SwiftUI](https://img.shields.io/badge/SwiftUI-FA7343?style=for-the-badge&logo=swift&logoColor=white)
+![iOS](https://img.shields.io/badge/iOS-333333?style=for-the-badge&logo=apple&logoColor=white)
+
+
 
 ---
 
